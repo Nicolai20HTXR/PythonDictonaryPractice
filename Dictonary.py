@@ -19,8 +19,11 @@ person = {
     "Klasse": "",
     "Alder": ""
 }
-
-
+try:
+    with open("savedPersoner.json","r") as f:
+        personer = json.loads(f.read())
+except:
+    print("")
 
 def addPersonsToPersoner(amount):
     for addToPersoner in range(int(amount)):
@@ -49,20 +52,20 @@ def addRandomPersonsToPersoner(amount):
         tempPerson["Skole"] = cityPerson + " School"
         tempPerson["Klasse"] = str(classYear)
         tempPerson["Alder"] = str(classYear+math.floor(random.randrange(7,20)))
-        personer[len(personer)] = tempPerson
+        personer[str(len(personer))] = tempPerson
         print(tempPerson)
 
 def main():
-    menuNav = input("\n1: Edit\n2: Add\n3: Search\n4: List Full\n5: Generate random \n")
+    menuNav = input("\n1: Edit\n2: Add\n3: Search\n4: List Full\n5: Generate random\n6: Save All\n")
     match menuNav:
         case "1":
             idPerson = input("Which ID of person you want to edit?:\n")
-            print(personer.get(int(idPerson)))
+            print(personer.get(str(idPerson)))
             confirmEdit=input("y/n\n")
             if confirmEdit == "Y" or confirmEdit == "y":
                 editKey = input("Navn, Efternavn, By, Postnummer, Skole, Klasse, Alder\n")
-                personer.get(int(idPerson)).update({editKey:input("Edit to?:\n")})
-                print(personer.get(int(idPerson)))
+                personer.get(str(idPerson)).update({editKey:input("Edit to?:\n")})
+                print(personer.get(str(idPerson)))
         case "2":
             addPersonsToPersoner(input("How many you wanna add?\n"))
         case "3":
@@ -76,8 +79,13 @@ def main():
                 print(idPerson, infoPerson)
         case "5":
             addRandomPersonsToPersoner(input("Amount of random\n"))
+        case "6":
+            saveString = json.dumps(personer, indent=2)
+            with open("savedPersoner.json","w") as f:
+                f.write(saveString)
         case _:
             print("Did not understand!")
+            print(personer)
     main()
 
 main()
